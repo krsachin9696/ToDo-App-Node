@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Login Page</title>
+  
+  <style>
+
+body {
+  font-family: Arial, sans-serif;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  background-color: #f1f1f1;
+}
+
+.login-container {
+  display: flex;
+  background-color: #ffffff;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+  width: 450px; /* Adjust this width based on your preference */
+}
+
+.form-container {
+  flex: 1;
+  padding-right: 20px; /* Add some spacing between the form and the design */
+}
+
+.design-container {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+}
+
+h1 {
+  text-align: center;
+  margin-bottom: 20px;
+  color: #333333;
+}
+
+.form-group {
+  margin-bottom: 15px;
+}
+
+label {
+  display: block;
+  margin-bottom: 5px;
+  color: #555555;
+}
+
+input[type="text"],
+input[type="password"] {
+  width: 100%;
+  padding: 8px;
+  border: 1px solid #cccccc;
+  border-radius: 4px;
+}
+
+button {
+  width: 100%;
+  padding: 10px;
+  background-color: #4CAF50;
+  color: #ffffff;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 16px;
+}
+
+button:hover {
+  background-color: #45a049;
+}
+
+button:focus {
+  outline: none;
+}
+
+button:active {
+  background-color: #3e8e41;
+}
+
+/* Style for the design container */
+.design-container {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+}
+
+.design-container div {
+  position: absolute;
+}
+
+.circle {
+  width: 150px;
+  height: 150px;
+  background-color: #007bff;
+  border-radius: 50%;
+  top: 50%; /* Updated */
+  left: 50%; /* Updated */
+  transform: translate(-50%, -50%); /* Added */
+}
+
+.square {
+  width: 100px;
+  height: 100px;
+  background-color: #f44336;
+  top: 30%; /* Updated */
+  left: 25%; /* Updated */
+}
+
+.triangle {
+  width: 0;
+  height: 0;
+  border-left: 75px solid transparent;
+  border-right: 75px solid transparent;
+  border-bottom: 130px solid #4CAF50;
+  top: 70%; /* Updated */
+  left: 75%; /* Updated */
+}
+
+  </style>
+</head>
+<body>
+  <div class="login-container">
+    <div class="form-container">
+      <h1>Login</h1>
+      <form id="login-form" action="/login" method="post">
+        <div class="form-group">
+          <label for="username">Username:</label>
+          <input type="text" id="username" name="username" required>
+        </div>
+        <div class="form-group">
+          <label for="password">Password:</label>
+          <input type="password" id="password" name="password" required>
+        </div>
+        <button type="submit">Login</button>
+      </form>
+    </div>
+    <!-- <div class="design-container">
+      <div class="circle"></div>
+      <div class="square"></div>
+      <div class="triangle"></div>
+    </div> -->
+  </div>
+</body>
+</html>
