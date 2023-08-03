@@ -30,7 +30,7 @@ submitTodoNode.addEventListener("submit", function (event) {
     formData.append("pic", imageFile);
 
     fetch("/todo", {       // The fetch function is a modern way to make network requests, 
-        // method: "POST",    // and in this case, it's used to send the todo object to the server.
+        method: "POST",    // and in this case, it's used to send the todo object to the server.
         // headers: {
         //     "Content-Type": "application/json",
         // },
@@ -102,6 +102,8 @@ submitTodoNode.addEventListener("submit", function (event) {
 //   todoListNode.appendChild(todoItemNode);
 //   }
 function showTodoInUI(todo) {
+    console.log(todo);
+
     const todoItemNode = document.createElement("div");
     todoItemNode.classList.add("todo-item");
 
@@ -139,7 +141,7 @@ function showTodoInUI(todo) {
 
     // Image Display
     const img = document.createElement("img");
-    img.setAttribute("src", todo.image);
+    img.setAttribute("src", todo.imageFile);
     img.alt = "Task Image";
     img.classList.add("task-image");
 

@@ -1,6 +1,8 @@
 const express = require('express');
 const fs = require('fs');
 var session = require('express-session')
+const multer  = require('multer')
+const upload = multer({ dest: 'uploads/' })
 
 const app = express();
 
@@ -13,6 +15,8 @@ app.use(session({
 app.use(express.json());
 app.use(express.urlencoded({extended: true }));
 
+app.use(upload.single("pic"));
+
 app.get("/", function(req, res) {
     if(!req.session.isLoggedIn) {
         res.redirect("/login");
@@ -22,7 +26,14 @@ app.get("/", function(req, res) {
 });
 
 app.post("/todo", function (req, res) {
-    saveTodoInFile(req.body, function (err) {
+    const todo = {
+        todoText: req.body.todoText,
+        priority: req.body.priority,
+        checked: false,
+        imageFile: req.file.filename, // Save the image file in the todo object
+    };
+    // console.log(todo);
+    saveTodoInFile(todo, function (err) {
         if(err){
             res.status(500).send("error");
             return; 
@@ -32,6 +43,7 @@ app.post("/todo", function (req, res) {
 });
 
 app.get("/todo-data", function (req, res) {
+    console.log(req.body);
     readAllTodos(function (err, data) {
         if(err) {
             res.status(500).send("error");
@@ -110,7 +122,7 @@ app.post("/login", function(req, res) {
     const password = req.body.password;
 
     // console.log(username, password);
-    if(username === "shan" && password === "shan") {
+    if(username === password) {
         // res.status(200).send("success");
         req.session.isLoggedIn = true;
         req.session.username = username;
@@ -128,12 +140,12 @@ app.listen(3000, function () {
 
 
 function readAllTodos(callback){
-    fs.readFile("./treasures.mp4", "utf-8", function (err, data) {
+    fs.readFile("./treasure.txt", "utf-8", function (err, data) {
         if (err){
             callback(err);
             return;
         }
-
+        
         if (data.length === 0){
             data = "[]";
         }
@@ -142,22 +154,22 @@ function readAllTodos(callback){
             data = JSON.parse(data);
             callback(null, data);
         } catch (err) {
-            callback(err);
+            callback([]);
         }
     });
 }
 
 function saveTodoInFile(todo, callback){
+    
     readAllTodos(function (err, data) {
         if(err){
             callback(err);
             return;
         }
 
-
         data.push(todo);
 
-        fs.writeFile("./treasures.mp4", JSON.stringify(data), function (err) {
+        fs.writeFile("./treasure.txt", JSON.stringify(data), function (err) {
             if(err) {
                 callback(err);
                 return;
@@ -179,7 +191,7 @@ function deleteTodoFromFile(todo, callback) {
         // Find and remove the task with matching todoText
         data = data.filter((item) => item.todoText !== todo.todoText);
 
-        fs.writeFile("./treasures.mp4", JSON.stringify(data), function (err) {
+        fs.writeFile("./treasure.txt", JSON.stringify(data), function (err) {
             if (err) {
                 callback(err);
                 return;
@@ -205,7 +217,7 @@ function deleteTodoFromFile(todo, callback) {
 //             taskToUpdate.checked = checkedStatus;
 //         }
 
-//         fs.writeFile("./treasures.mp4", JSON.stringify(data), function (err) {
+//         fs.writeFile("./treasure.txt", JSON.stringify(data), function (err) {
 //             if (err) {
 //                 callback(err);
 //                 return;
@@ -228,7 +240,7 @@ function updateTodoCheckedStatusInFile(todoText, checkedStatus, callback) {
         taskToUpdate.checked = checkedStatus;
       }
   
-      fs.writeFile("./treasures.mp4", JSON.stringify(data), function (err) {
+      fs.writeFile("./treasure.txt", JSON.stringify(data), function (err) {
         if (err) {
           callback(err);
           return;
