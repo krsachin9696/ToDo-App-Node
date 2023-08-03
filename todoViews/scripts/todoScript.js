@@ -1,18 +1,20 @@
-const submitTodoNode = document.getElementById("submitTodo");
+const submitTodoNode = document.getElementById("todo-container");
 const userInputNode = document.getElementById("userInput");
 const prioritySelectorNode = document.getElementById("prioritySelector");
+const picInputNode = document.getElementById("pic");
 const todoListNode = document.getElementById("todo-item");
 
-submitTodoNode.addEventListener("click", function () {
-
+submitTodoNode.addEventListener("submit", function (event) {
+    event.preventDefault();
     const todoText = userInputNode.value;
-    // debugger;
     userInputNode.value = "";
     const priority = prioritySelectorNode.value;
     prioritySelectorNode.value = "";
+
+    const imageFile = picInputNode.files[0];
     
-    if(!todoText || !priority){
-        alert("please enter a todo & select its priority");
+    if(!todoText || !priority || !imageFile){
+        alert("please enter a todo & select its priority and choose an image");
         return;
     }
 
@@ -20,17 +22,24 @@ submitTodoNode.addEventListener("click", function () {
         todoText,   // it is actually written as todoText: todoText, but 
         priority,   // if the key & value name is same then it can also be written as it is written 
         checked: false, // Set the initial checked status to false
+        imageFile,
     };
+    const formData = new FormData(); // Create a new FormData object
+    formData.append("todoText", todoText); // Append form fields to the FormData object
+    formData.append("priority", priority);
+    formData.append("pic", imageFile);
 
     fetch("/todo", {       // The fetch function is a modern way to make network requests, 
-        method: "POST",    // and in this case, it's used to send the todo object to the server.
-        headers: {
-            "Content-Type": "application/json",
-        },
-        body: JSON.stringify(todo),
+        // method: "POST",    // and in this case, it's used to send the todo object to the server.
+        // headers: {
+        //     "Content-Type": "application/json",
+        // },
+        // body: JSON.stringify(todo),
+        body: formData, // Use the FormData object as the request body
     }).then(function (response) {
         if(response.status === 200){
             showTodoInUI(todo);
+            // showTodoInUI(formData); // Pass the formData object to the UI function
         }
         else{
             alert("something went wrong");
@@ -39,24 +48,68 @@ submitTodoNode.addEventListener("click", function () {
 });
 
 // function showTodoInUI(todo) {
+//     const todoItemNode = document.createElement("div");
+//     todoItemNode.classList.add("todo-item");
+  
+//     const checkboxNode = document.createElement("input");
+//     checkboxNode.type = "checkbox";
+//     checkboxNode.classList.add("checkbox");
+//     checkboxNode.checked = todo.checked; // Set the initial checked status of the checkbox
+//     if(checkboxNode.checked){
+//         todoItemNode.classList.toggle("done", checkboxNode.checked);
+//     }
+
+//     checkboxNode.addEventListener("change", function () {
+//         // Mark the task as done when the checkbox is checked
+//         todoItemNode.classList.toggle("done", checkboxNode.checked);
+//         // Update the checked status on the server when the checkbox is changed
+//         updateCheckedStatusOnServer(todo.todoText, checkboxNode.checked);
+//     });
+  
 //     const todoTextNode = document.createElement("div");
 //     todoTextNode.innerText = todo.todoText;
-
-//     const priorityNode = document.createElement("span");
+//     todoTextNode.classList.add("task");
+  
+//     const priorityNode = document.createElement("div");
 //     priorityNode.innerText = todo.priority;
+//     priorityNode.classList.add("priority");
+  
+//     const deleteButtonNode = document.createElement("div");
+//     deleteButtonNode.innerText = "Delete";
+//     deleteButtonNode.classList.add("delete-button");
 
-//     todoListNode.appendChild(todoTextNode);
-//     todoListNode.appendChild(priorityNode);
-// }
+//     deleteButtonNode.addEventListener("click", function () {
+//         deleteTodoOnServer(todo); // Call the function to delete the task on the server
+//         todoItemNode.remove(); // Remove the task from the UI
+//     });
+    
+  
+//     todoItemNode.appendChild(checkboxNode);
+//     todoItemNode.appendChild(todoTextNode);
+//     todoItemNode.appendChild(priorityNode);
+//     todoItemNode.appendChild(deleteButtonNode);
+
+//     checkboxNode.classList.add("todo-checkbox");
+//     todoTextNode.classList.add("todo-task");
+//     priorityNode.classList.add("todo-priority");
+//     deleteButtonNode.classList.add("todo-delete");
+
+//     todoListNode.appendChild(todoItemNode);
+
+//     // Add the custom data attribute to the task container
+//   todoItemNode.dataset.todo = todo.todoText;
+
+//   todoListNode.appendChild(todoItemNode);
+//   }
 function showTodoInUI(todo) {
     const todoItemNode = document.createElement("div");
     todoItemNode.classList.add("todo-item");
-  
+
     const checkboxNode = document.createElement("input");
     checkboxNode.type = "checkbox";
     checkboxNode.classList.add("checkbox");
     checkboxNode.checked = todo.checked; // Set the initial checked status of the checkbox
-    if(checkboxNode.checked){
+    if (checkboxNode.checked) {
         todoItemNode.classList.toggle("done", checkboxNode.checked);
     }
 
@@ -66,15 +119,15 @@ function showTodoInUI(todo) {
         // Update the checked status on the server when the checkbox is changed
         updateCheckedStatusOnServer(todo.todoText, checkboxNode.checked);
     });
-  
+
     const todoTextNode = document.createElement("div");
     todoTextNode.innerText = todo.todoText;
     todoTextNode.classList.add("task");
-  
+
     const priorityNode = document.createElement("div");
     priorityNode.innerText = todo.priority;
     priorityNode.classList.add("priority");
-  
+
     const deleteButtonNode = document.createElement("div");
     deleteButtonNode.innerText = "Delete";
     deleteButtonNode.classList.add("delete-button");
@@ -83,25 +136,31 @@ function showTodoInUI(todo) {
         deleteTodoOnServer(todo); // Call the function to delete the task on the server
         todoItemNode.remove(); // Remove the task from the UI
     });
-    
-  
+
+    // Image Display
+    const img = document.createElement("img");
+    img.setAttribute("src", todo.image);
+    img.alt = "Task Image";
+    img.classList.add("task-image");
+
     todoItemNode.appendChild(checkboxNode);
     todoItemNode.appendChild(todoTextNode);
     todoItemNode.appendChild(priorityNode);
+    todoItemNode.appendChild(img);
     todoItemNode.appendChild(deleteButtonNode);
 
     checkboxNode.classList.add("todo-checkbox");
     todoTextNode.classList.add("todo-task");
     priorityNode.classList.add("todo-priority");
+    img.classList.add("todo-image");
     deleteButtonNode.classList.add("todo-delete");
 
     todoListNode.appendChild(todoItemNode);
 
     // Add the custom data attribute to the task container
-  todoItemNode.dataset.todo = todo.todoText;
+    todoItemNode.dataset.todo = todo.todoText;
+}
 
-  todoListNode.appendChild(todoItemNode);
-  }
   
 
 fetch("/todo-data")
