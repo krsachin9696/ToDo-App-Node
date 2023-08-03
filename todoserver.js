@@ -1,7 +1,8 @@
 const express = require('express');
 const fs = require('fs');
 var session = require('express-session')
-
+const multer = require('multer');
+const upload = multer({ dest: 'uploads/' });
 const app = express();
 
 app.use(session({
@@ -13,6 +14,9 @@ app.use(session({
 app.use(express.json());
 app.use(express.urlencoded({extended: true }));
 
+// Use the multer middleware to handle multipart form data
+app.use(upload.single("image"));                // single means only one file/photo can be uploaded. and image is the name of incoming file.
+
 app.get("/", function(req, res) {
     if(!req.session.isLoggedIn) {
         res.redirect("/login");
@@ -22,13 +26,26 @@ app.get("/", function(req, res) {
 });
 
 app.post("/todo", function (req, res) {
+    // console.log(req.body,);
+    const userInput = req.body.userInput; // Text input value
+    const prioritySelector = req.body.prioritySelector; // Priority selection
+    const uploadedFile = req.file; // Uploaded file data
+
+    // Create an object containing the form data to pass to the saveTodoInFile function
+    const todoData = {
+        todoText: userInput,
+        priority: prioritySelector,
+        file: uploadedFile,
+        // Add any other properties or data you want to save here
+    };
     saveTodoInFile(req.body, function (err) {
+    // saveTodoInFile(todoData, function (err) {
         if(err){
             res.status(500).send("error");
             return; 
         }
         res.status(200).send("success");
-    })
+    });
 });
 
 app.get("/todo-data", function (req, res) {
@@ -110,7 +127,7 @@ app.post("/login", function(req, res) {
     const password = req.body.password;
 
     // console.log(username, password);
-    if(username === "shan" && password === "shan") {
+    if(username === "s" && password === "s") {
         // res.status(200).send("success");
         req.session.isLoggedIn = true;
         req.session.username = username;
@@ -128,7 +145,7 @@ app.listen(3000, function () {
 
 
 function readAllTodos(callback){
-    fs.readFile("./treasures.mp4", "utf-8", function (err, data) {
+    fs.readFile("./treasures.txt", "utf-8", function (err, data) {
         if (err){
             callback(err);
             return;
@@ -148,6 +165,7 @@ function readAllTodos(callback){
 }
 
 function saveTodoInFile(todo, callback){
+    // console.log(todo, "ye nhi chal rha");
     readAllTodos(function (err, data) {
         if(err){
             callback(err);
@@ -157,7 +175,7 @@ function saveTodoInFile(todo, callback){
 
         data.push(todo);
 
-        fs.writeFile("./treasures.mp4", JSON.stringify(data), function (err) {
+        fs.writeFile("./treasures.txt", JSON.stringify(data), function (err) {
             if(err) {
                 callback(err);
                 return;
@@ -179,7 +197,7 @@ function deleteTodoFromFile(todo, callback) {
         // Find and remove the task with matching todoText
         data = data.filter((item) => item.todoText !== todo.todoText);
 
-        fs.writeFile("./treasures.mp4", JSON.stringify(data), function (err) {
+        fs.writeFile("./treasures.txt", JSON.stringify(data), function (err) {
             if (err) {
                 callback(err);
                 return;
@@ -191,30 +209,7 @@ function deleteTodoFromFile(todo, callback) {
 }
 
 
-// // New function to update the checked status of a task in the file
-// function updateCheckedStatusInFile(todoText, checkedStatus, callback) {
-//     readAllTodos(function (err, data) {
-//         if (err) {
-//             callback(err);
-//             return;
-//         }
 
-//         // Find the task with the matching todoText
-//         const taskToUpdate = data.find((task) => task.todoText === todoText);
-//         if (taskToUpdate) {
-//             taskToUpdate.checked = checkedStatus;
-//         }
-
-//         fs.writeFile("./treasures.mp4", JSON.stringify(data), function (err) {
-//             if (err) {
-//                 callback(err);
-//                 return;
-//             }
-
-//             callback(null);
-//         });
-//     });
-// }
 function updateTodoCheckedStatusInFile(todoText, checkedStatus, callback) {
     readAllTodos(function (err, data) {
       if (err) {
@@ -228,7 +223,7 @@ function updateTodoCheckedStatusInFile(todoText, checkedStatus, callback) {
         taskToUpdate.checked = checkedStatus;
       }
   
-      fs.writeFile("./treasures.mp4", JSON.stringify(data), function (err) {
+      fs.writeFile("./treasures.txt", JSON.stringify(data), function (err) {
         if (err) {
           callback(err);
           return;

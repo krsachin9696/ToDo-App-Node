@@ -47,7 +47,7 @@
 
    
     .todo-container {
-      max-width: 500px;
+      max-width: 700px;
       margin: 0 auto;
       display: flex;
       align-items: center;
@@ -259,7 +259,7 @@
     <h2> Achieve your goals one task at a time</h2>
     <p>Transform your life by staying organized and motivated with our powerful Todo App!</p>
 
-    <div class="todo-container">
+    <!-- <div class="todo-container">
       <input type="text" placeholder="Add a task..." id="userInput" />
 
       <select name="" id="prioritySelector">
@@ -268,9 +268,28 @@
         <option value="medium">Medium</option>
         <option value="low">Low</option>
       </select>
+      <label for="pic">Image:</label>
+      <input type="file" id="pic" name="pic" required>
 
       <button id="submitTodo">Add Task</button>
-    </div>
+    </div> -->
+
+    <form class="todo-container" id="todo-container" enctype="multipart/form-data">
+      <input type="text" placeholder="Add a task..." id="userInput" />
+    
+      <select name="" id="prioritySelector">
+        <option value="" selected disabled>Select Priority</option>
+        <option value="high">High</option>
+        <option value="medium">Medium</option>
+        <option value="low">Low</option>
+      </select>
+    
+      <label for="pic">Image:</label>
+      <input type="file" id="pic" name="pic" required>
+    
+      <button type="submit" id="submitTodo">Add Task</button>
+    </form>
+    
 
     <div class="todo-item" id="todo-item">
       <!-- Todo items will be added here dynamically using JavaScript -->
