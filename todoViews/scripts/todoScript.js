@@ -12,6 +12,7 @@ submitTodoNode.addEventListener("submit", function (event) {
     prioritySelectorNode.value = "";
 
     const imageFile = picInputNode.files[0];
+    console.log(imageFile);
     
     if(!todoText || !priority || !imageFile){
         alert("please enter a todo & select its priority and choose an image");
@@ -24,17 +25,17 @@ submitTodoNode.addEventListener("submit", function (event) {
         checked: false, // Set the initial checked status to false
         imageFile,
     };
+    // console.log(todo, "ye todo hai");
+
     const formData = new FormData(); // Create a new FormData object
     formData.append("todoText", todoText); // Append form fields to the FormData object
     formData.append("priority", priority);
     formData.append("pic", imageFile);
+    // console.log(formData, "aur ye formData h");
 
     fetch("/todo", {       // The fetch function is a modern way to make network requests, 
         method: "POST",    // and in this case, it's used to send the todo object to the server.
-        // headers: {
-        //     "Content-Type": "application/json",
-        // },
-        // body: JSON.stringify(todo),
+
         body: formData, // Use the FormData object as the request body
     }).then(function (response) {
         if(response.status === 200){

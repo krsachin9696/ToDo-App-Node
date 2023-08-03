@@ -46,7 +46,7 @@ app.post("/todo", function (req, res) {
 });
 
 app.get("/todo-data", function (req, res) {
-    console.log(req.body);
+    // console.log(req.body);
     readAllTodos(function (err, data) {
         if(err) {
             res.status(500).send("error");
@@ -111,9 +111,9 @@ app.get("/todo", function (req, res) {
     res.sendFile(__dirname + "/todoViews/todo.html");
 });
 
-app.get("/scripts/todoScript.js", function (req, res) {
-    res.sendFile(__dirname + "/todoViews/scripts/todoScript.js");
-});
+// app.get("/scripts/todoScript.js", function (req, res) {
+//     res.sendFile(__dirname + "/todoViews/scripts/todoScript.js");
+// });
 
 app.get("/login", function(req, res) {
     res.sendFile(__dirname + "/todoViews/login.html");
@@ -206,30 +206,7 @@ function deleteTodoFromFile(todo, callback) {
 }
 
 
-// // New function to update the checked status of a task in the file
-// function updateCheckedStatusInFile(todoText, checkedStatus, callback) {
-//     readAllTodos(function (err, data) {
-//         if (err) {
-//             callback(err);
-//             return;
-//         }
 
-//         // Find the task with the matching todoText
-//         const taskToUpdate = data.find((task) => task.todoText === todoText);
-//         if (taskToUpdate) {
-//             taskToUpdate.checked = checkedStatus;
-//         }
-
-//         fs.writeFile("./treasure.txt", JSON.stringify(data), function (err) {
-//             if (err) {
-//                 callback(err);
-//                 return;
-//             }
-
-//             callback(null);
-//         });
-//     });
-// }
 function updateTodoCheckedStatusInFile(todoText, checkedStatus, callback) {
     readAllTodos(function (err, data) {
       if (err) {
