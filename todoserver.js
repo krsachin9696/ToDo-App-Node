@@ -41,7 +41,8 @@ app.post("/todo", function (req, res) {
             res.status(500).send("error");
             return; 
         }
-        res.status(200).send("success");
+        // res.status(200).send("success");
+        res.status(200).json(todo);
     })
 });
 

@@ -39,12 +39,14 @@ submitTodoNode.addEventListener("submit", function (event) {
         body: formData, // Use the FormData object as the request body
     }).then(function (response) {
         if(response.status === 200){
-            showTodoInUI(todo);
-            // showTodoInUI(formData); // Pass the formData object to the UI function
+            
+            return response.json();
         }
         else{
             alert("something went wrong");
         }
+    }).then(function (todo) {
+        showTodoInUI(todo);
     });
 });
 
