@@ -15,6 +15,9 @@ app.use(session({
 app.use(express.json());
 app.use(express.urlencoded({extended: true }));
 
+app.use(express.static("todoViews"));
+app.use(express.static("uploads"));
+
 app.use(upload.single("pic"));
 
 app.get("/", function(req, res) {

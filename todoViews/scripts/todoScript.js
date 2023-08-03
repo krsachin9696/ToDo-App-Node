@@ -47,62 +47,7 @@ submitTodoNode.addEventListener("submit", function (event) {
     });
 });
 
-// function showTodoInUI(todo) {
-//     const todoItemNode = document.createElement("div");
-//     todoItemNode.classList.add("todo-item");
-  
-//     const checkboxNode = document.createElement("input");
-//     checkboxNode.type = "checkbox";
-//     checkboxNode.classList.add("checkbox");
-//     checkboxNode.checked = todo.checked; // Set the initial checked status of the checkbox
-//     if(checkboxNode.checked){
-//         todoItemNode.classList.toggle("done", checkboxNode.checked);
-//     }
-
-//     checkboxNode.addEventListener("change", function () {
-//         // Mark the task as done when the checkbox is checked
-//         todoItemNode.classList.toggle("done", checkboxNode.checked);
-//         // Update the checked status on the server when the checkbox is changed
-//         updateCheckedStatusOnServer(todo.todoText, checkboxNode.checked);
-//     });
-  
-//     const todoTextNode = document.createElement("div");
-//     todoTextNode.innerText = todo.todoText;
-//     todoTextNode.classList.add("task");
-  
-//     const priorityNode = document.createElement("div");
-//     priorityNode.innerText = todo.priority;
-//     priorityNode.classList.add("priority");
-  
-//     const deleteButtonNode = document.createElement("div");
-//     deleteButtonNode.innerText = "Delete";
-//     deleteButtonNode.classList.add("delete-button");
-
-//     deleteButtonNode.addEventListener("click", function () {
-//         deleteTodoOnServer(todo); // Call the function to delete the task on the server
-//         todoItemNode.remove(); // Remove the task from the UI
-//     });
-    
-  
-//     todoItemNode.appendChild(checkboxNode);
-//     todoItemNode.appendChild(todoTextNode);
-//     todoItemNode.appendChild(priorityNode);
-//     todoItemNode.appendChild(deleteButtonNode);
-
-//     checkboxNode.classList.add("todo-checkbox");
-//     todoTextNode.classList.add("todo-task");
-//     priorityNode.classList.add("todo-priority");
-//     deleteButtonNode.classList.add("todo-delete");
-
-//     todoListNode.appendChild(todoItemNode);
-
-//     // Add the custom data attribute to the task container
-//   todoItemNode.dataset.todo = todo.todoText;
-
-//   todoListNode.appendChild(todoItemNode);
-//   }
 function showTodoInUI(todo) {
-    console.log(todo);
 
     const todoItemNode = document.createElement("div");
     todoItemNode.classList.add("todo-item");
