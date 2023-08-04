@@ -12,7 +12,7 @@ submitTodoNode.addEventListener("submit", function (event) {
     prioritySelectorNode.value = "";
 
     const imageFile = picInputNode.files[0];
-    console.log(imageFile);
+    // console.log(imageFile);
     
     if(!todoText || !priority || !imageFile){
         alert("please enter a todo & select its priority and choose an image");
@@ -43,7 +43,7 @@ submitTodoNode.addEventListener("submit", function (event) {
             return response.json();
         }
         else{
-            alert("something went wrong");
+            alert("server did not respond success");
         }
     }).then(function (todo) {
         showTodoInUI(todo);
